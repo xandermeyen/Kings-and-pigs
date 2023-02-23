@@ -4,17 +4,10 @@ const c = canvas.getContext('2d')
 canvas.width = 1024
 canvas.height = 576
 
-const parsedCollisions = collisionsLevel1.parse2D()
-const collisionBlocks = parsedCollisions.createObejectsFrom2D()
-
-const backgroundLevel1 = new Sprite({
-    position: {
-        x: 0,
-        y: 0,
-    },
-    imageSrc: './img/backgroundLevel1.png'
-})
-
+let parsedCollisions
+let collisionBlocks
+let background
+let doors
 const player = new Player({
     collisionBlocks,
     imageSrc: './img/king/idle.png',
@@ -59,19 +52,37 @@ const player = new Player({
     },
 })
 
-const doors = [
-    new Sprite({
-        position: {
-            x: 767,
-            y: 270,
-        },
-        imageSrc: './img/doorOpen.png',
-        frameRate: 5,
-        frameBuffer: 9,
-        loop: false,
-        autoplay: false,
-    })
-]
+let level = 1
+let levels = {
+    1: {
+        init: () => {
+            parsedCollisions = collisionsLevel1.parse2D()
+            collisionBlocks = parsedCollisions.createObejectsFrom2D()
+
+            background = new Sprite({
+                position: {
+                    x: 0,
+                    y: 0,
+                },
+                imageSrc: './img/backgroundLevel1.png'
+            })
+
+            doors = [
+                new Sprite({
+                    position: {
+                        x: 767,
+                        y: 270,
+                    },
+                    imageSrc: './img/doorOpen.png',
+                    frameRate: 5,
+                    frameBuffer: 9,
+                    loop: false,
+                    autoplay: false,
+                })
+            ]
+        }
+    }
+}
 
 const keys = {
     w: {
@@ -112,6 +123,7 @@ function animate() {
     c.restore()
 }
 
+levels[level].init()
 animate()
 
 
